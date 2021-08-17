@@ -1,0 +1,13 @@
+---
+- hosts: localhost
+  become: yes
+
+  tasks:
+    - name: modify a config
+      lineinfile:
+        dest: /home/ansible/ansible/db.example
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+      with_items:
+        - { regexp: '\xpclient        IN      A       192.196.80.2$', line; 'kernel.shmall = 2097152' }
+        - { regexp: '\robin4          IN      A       192.196.80.1$', line; 'kernel.shmmax = 134217728' }
