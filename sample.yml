@@ -3,11 +3,31 @@
   become: yes
 
   tasks:
-    - name: modify a config
-      lineinfile:
-        dest: /home/ansible/ansible/db.example
-        regexp: "{{ item.regexp }}"
-        line: "{{ item.line }}"
+    - name: copy from e.g. to isilon file name
+      copy:
+          src: /home/ansible/ansible/db.example
+          dest: /home/ansible/dnsconf/db.isilon
+
+
+
+    - name: delete sample DNS config 
+      replace: dest=/home/ansible/dnsconf/db.isilon
+               regexp="{{item.regexp}}"
+               replace="{{item.replace}}"
       with_items:
-        - { regexp: '\xpclient        IN      A       192.196.80.2$', line; 'kernel.shmall = 2097152' }
-        - { regexp: '\robin4          IN      A       192.196.80.1$', line; 'kernel.shmmax = 134217728' }
+         - { regexp: '^xpclient        IN      A       192.196.80.2', replace: '' }      
+         - { regexp: '^robin4          IN      A       192.196.80.1', replace: '' }
+
+
+
+    - name: add isilon DNS config
+      lineinfile: dest=/home/ansible/dnsconf/db.isilon
+                  insertbefore='^www             IN      CNAME   ubuntu.example.com.'
+                  line="{{item.line}}"
+      with_items:
+        - { line: 'isilon1         IN      A       172.22.46.1' }
+        - { line: 'isilon2         IN      A       172.22.46.2' }
+
+
+
+    

@@ -11,11 +11,12 @@
          - { regexp: '^xpclient        IN      A       192.196.80.2', replace: '' }      
          - { regexp: '^robin4          IN      A       192.196.80.1', replace: '' }
 
+
+
     - name: modify a config2
       lineinfile: dest=/home/ansible/ansible/db.example
                   insertbefore='^www             IN      CNAME   ubuntu.example.com.'
                   line="{{item.line}}"
       with_items:
-        - { line: 'PasswordAuthentication no' }
-        # Root ログイン禁止
-        - { line: 'PermitRootLogin no' }
+        - { line: 'isilon1        IN      A       172.22.46.1' }
+        - { line: 'isilon2        IN      A       172.22.46.2' }
