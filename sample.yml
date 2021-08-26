@@ -17,8 +17,7 @@
       with_items:
          - { regexp: '^xpclient        IN      A       192.196.80.2', replace: '' }      
          - { regexp: '^robin4          IN      A       192.196.80.1', replace: '' }
-
-
+        
 
     - name: add isilon DNS config
       lineinfile: dest=/home/ansible/dnsconf/db.isilon
@@ -27,7 +26,7 @@
       with_items:
         - { line: 'isilon1         IN      A       172.22.46.1' }
         - { line: 'isilon2         IN      A       172.22.46.2' }
-
+        - { line: 'isilon3         IN      A       172.22.46.3' }
 
 
     
