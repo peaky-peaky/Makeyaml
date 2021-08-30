@@ -3,8 +3,14 @@
   become: yes
 
   tasks:
-    - name: modify a config
-      replace: dest=/home/ansible/ansible/db.example-rtr
+    - name: copy from e.g. to isilon file name
+      copy:
+          src: /home/ansible/ansible/db.example-ptr
+          dest: /home/ansible/dnsconf/db.isilon-ptr
+
+
+    - name: delete sample DNS PTR config
+      replace: dest=/home/ansible/dnsconf/db.isilon-ptr
                regexp="{{item.regexp}}"
                replace="{{item.replace}}"
       with_items:
@@ -14,10 +20,11 @@
 
 
 
-    - name: modify a config2
-      lineinfile: dest=/home/ansible/ansible/db.example-ptr
+    - name: add isilon PTR config
+      lineinfile: dest=/home/ansible/dnsconf/db.isilon-ptr
                   insertbefore='^www     IN      CNAME   ubuntu.example.com.'
                   line="{{item.line}}"
       with_items:
-        - { line: '1       IN      PTR     isilon1.example.com.' }
-        - { line: '2       IN      PTR     isilon2.example.com.' }
+        - { line: '1       IN      PTR     isilon1.isilon.com.' }
+        - { line: '2       IN      PTR     isilon2.isilon.com.' }
+        - { line: '3       IN      PTR     isilon3.isilon.com.' }

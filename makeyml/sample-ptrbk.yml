@@ -1,0 +1,23 @@
+---
+- hosts: localhost
+  become: yes
+
+  tasks:
+    - name: modify a config
+      replace: dest=/home/ansible/ansible/db.example-rtr
+               regexp="{{item.regexp}}"
+               replace="{{item.replace}}"
+      with_items:
+         - { regexp: '^2       IN      PTR     xpclient.example.com.', replace: '' }      
+         - { regexp: '^1       IN      PTR     robin4.example.com.', replace: '' }
+
+
+
+
+    - name: modify a config2
+      lineinfile: dest=/home/ansible/ansible/db.example-ptr
+                  insertbefore='^www     IN      CNAME   ubuntu.example.com.'
+                  line="{{item.line}}"
+      with_items:
+        - { line: '1       IN      PTR     isilon1.example.com.' }
+        - { line: '2       IN      PTR     isilon2.example.com.' }
