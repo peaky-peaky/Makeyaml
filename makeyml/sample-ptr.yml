@@ -1,0 +1,30 @@
+---
+- hosts: localhost
+  become: yes
+
+  tasks:
+    - name: copy from e.g. to isilon file name
+      copy:
+          src: /home/ansible/ansible/db.example-ptr
+          dest: /home/ansible/dnsconf/db.isilon-ptr
+
+
+    - name: delete sample DNS PTR config
+      replace: dest=/home/ansible/dnsconf/db.isilon-ptr
+               regexp="{{item.regexp}}"
+               replace="{{item.replace}}"
+      with_items:
+         - { regexp: '^2       IN      PTR     xpclient.example.com.', replace: '' }      
+         - { regexp: '^1       IN      PTR     robin4.example.com.', replace: '' }
+
+
+
+
+    - name: add isilon PTR config
+      lineinfile: dest=/home/ansible/dnsconf/db.isilon-ptr
+                  insertbefore='^www     IN      CNAME   ubuntu.example.com.'
+                  line="{{item.line}}"
+      with_items:
+        - { line: '1       IN      PTR     isilon1.isilon.com.' }
+        - { line: '2       IN      PTR     isilon2.isilon.com.' }
+        - { line: '3       IN      PTR     isilon3.isilon.com.' }

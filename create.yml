@@ -1,0 +1,49 @@
+---
+- hosts: localhost
+  become: yes
+
+  tasks:
+    - name: delete space for last space 1
+      replace: dest=/home/ansible/dnsconf/named.conf.local
+               regexp="{{item.regexp}}"
+               replace="{{item.replace}}"
+      with_items:
+        - { regexp: '^type master; ', replace: 'type master;' }
+        - { regexp: '^}; ', replace: '};' }
+
+
+
+    - name: add named.conf.local PTR-record
+      lineinfile: dest=/home/ansible/dnsconf/named.conf.local
+                  insertbefore='^#sample_for_add-PTRrecord'
+                  line="{{item.line}}"
+      with_items:
+        - { line: ' ' }
+        - { line: 'zone "46.22.172.in-addr.arpa"{' }
+        - { line: 'type master; ' }
+        - { line: 'file "/etc/bind/db.isilon-ptr";' }
+        - { line: '}; ' }
+
+
+    
+    - name: delete space for last space 2
+      replace: dest=/home/ansible/dnsconf/named.conf.local
+               regexp="{{item.regexp}}"
+               replace="{{item.replace}}"
+      with_items:
+        - { regexp: '^type master; ', replace: 'type master;' }
+        - { regexp: '^}; ', replace: '};' }      
+
+
+
+
+    - name: add named.conf.local A-record
+      lineinfile: dest=/home/ansible/dnsconf/named.conf.local
+                  insertbefore='^#sample_for_add-Arecord'
+                  line="{{item.line}}"
+      with_items:
+        - { line: ' ' }
+        - { line: 'zone "isilon.com"{' }
+        - { line: 'type master; ' }
+        - { line: 'file "/etc/bind/db.isilon";' }
+        - { line: '}; ' }
